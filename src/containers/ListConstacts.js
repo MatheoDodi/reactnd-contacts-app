@@ -17,6 +17,11 @@ class ListContact extends Component {
     .then(data => this.setState( {contacts: data.contacts} ));
   }
 
+  deleteContactHandler = (e, id) => {
+    const contacts = this.state.contacts.filter(contact => contact.id !== id);
+    this.setState( {contacts: contacts} );
+  }
+
   render() {
       
     return (
@@ -28,7 +33,7 @@ class ListContact extends Component {
               <p>{contact.name}</p>
               <p>{contact.handle}</p>
             </div>
-            <button className="contact-remove"></button>
+            <button onClick={(e) => this.deleteContactHandler(e, contact.id)} className="contact-remove"></button>
           </li>
         ))}
       </ul>
