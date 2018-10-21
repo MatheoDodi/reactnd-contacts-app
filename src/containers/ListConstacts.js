@@ -1,5 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment  } from 'react';
 import styled from 'styled-components';
+import sortBy from 'sort-by';
+import Search from '../components/Search';
+
 
 const IMG = styled.div`
   background-image: url(${props => props.url});
@@ -7,14 +10,18 @@ const IMG = styled.div`
 
 class ListContact extends Component {
   state = {
-    contacts: []
+    contacts: [],
+    input: {
+      value: ''
+    },
+    queryContacts: []
   }
 
   componentDidMount() {
     fetch('http://localhost:5001/contacts', 
     { headers: { 'Authorization': 'whatever-you-want' }})
     .then(resp => resp.json())
-    .then(data => this.setState( {contacts: data.contacts} ));
+    .then(data => this.setState( {contacts: data.contacts.sort(sortBy('name')), queryContacts: data.contacts.sort(sortBy('name'))} ));
   }
 
   deleteContactHandler = (e, id) => {
@@ -22,21 +29,36 @@ class ListContact extends Component {
     this.setState( {contacts: contacts} );
   }
 
+  updateValueHandler = (e) => {
+    const newInput = { ...this.state.input };
+    const currContacts = [ ...this.state.contacts ];
+    const currValue = e.target.value.trim();
+    const queryRegExp = new RegExp(currValue, 'gi');
+    newInput.value = currValue;
+    
+    const newContacts = currContacts.filter(contact => queryRegExp.test(contact.name));
+    console.log(newContacts);
+    this.setState( {input : newInput, queryContacts: newContacts} );
+  }
+
   render() {
       
     return (
-      <ul className="contact-list">
-        {this.state.contacts.map(contact => (
-          <li key={contact.id} className='contact-list-item'>
-            <IMG className="contact-avatar" url={contact.avatarURL}></IMG>
-            <div className="contact-details">
-              <p>{contact.name}</p>
-              <p>{contact.handle}</p>
-            </div>
-            <button onClick={(e) => this.deleteContactHandler(e, contact.id)} className="contact-remove"></button>
-          </li>
-        ))}
-      </ul>
+      <Fragment>
+        <Search change={this.updateValueHandler} val={this.state.input.value} />
+        <ul className="contact-list">
+          {this.state.queryContacts.map(contact => (
+            <li key={contact.id} className='contact-list-item'>
+              <IMG className="contact-avatar" url={contact.avatarURL}></IMG>
+              <div className="contact-details">
+                <p>{contact.name}</p>
+                <p>{contact.handle}</p>
+              </div>
+              <button onClick={(e) => this.deleteContactHandler(e, contact.id)} className="contact-remove"></button>
+            </li>
+          ))}
+        </ul>
+      </Fragment>
     )
   }
 }
