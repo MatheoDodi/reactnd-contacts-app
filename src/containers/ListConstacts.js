@@ -25,9 +25,15 @@ class ListContact extends Component {
     .then(data => this.setState( {contacts: data.contacts.sort(sortBy('name')), queryContacts: data.contacts.sort(sortBy('name'))} ));
   }
 
+
   deleteContactHandler = (e, id) => {
     const contacts = this.state.contacts.filter(contact => contact.id !== id);
-    this.setState( {contacts: contacts, queryContacts: contacts} );
+    this.setState( { queryContacts: contacts, contacts: contacts } );
+    fetch('http://localhost:5001/contacts/' + id, 
+    { method: "DELETE",
+      headers: { 'Authorization': 'whatever-you-want' }})
+    .then(res => res.json())
+    .then(response => console.log('Success:', JSON.stringify(response)));
   }
 
   updateValueHandler = (e) => {
