@@ -26,7 +26,7 @@ class ListContact extends Component {
 
   deleteContactHandler = (e, id) => {
     const contacts = this.state.contacts.filter(contact => contact.id !== id);
-    this.setState( {contacts: contacts} );
+    this.setState( {contacts: contacts, queryContacts: contacts} );
   }
 
   updateValueHandler = (e) => {
@@ -58,6 +58,11 @@ class ListContact extends Component {
             </li>
           ))}
         </ul>
+        {this.state.queryContacts.length === this.state.contacts.length 
+          ? null 
+          : <div className="showing-contacts">
+              <span>Showing {this.state.queryContacts.length} out of {this.state.contacts.length}</span>
+            </div> }
       </Fragment>
     )
   }
