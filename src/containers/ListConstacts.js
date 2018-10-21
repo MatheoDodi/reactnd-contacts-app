@@ -41,6 +41,8 @@ class ListContact extends Component {
     this.setState( {input : newInput, queryContacts: newContacts} );
   }
 
+  resetQueryContactsHandler = () => this.setState( {queryContacts: this.state.contacts, input: {value: ''}} )
+
   render() {
       
     return (
@@ -61,7 +63,7 @@ class ListContact extends Component {
         {this.state.queryContacts.length === this.state.contacts.length 
           ? null 
           : <div className="showing-contacts">
-              <span>Showing {this.state.queryContacts.length} out of {this.state.contacts.length}</span>
+              <span>Showing {this.state.queryContacts.length} out of {this.state.contacts.length}</span><button onClick={this.resetQueryContactsHandler} >Show All</button>
             </div> }
       </Fragment>
     )
