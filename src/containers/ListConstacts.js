@@ -2,7 +2,6 @@ import React, { Component, Fragment  } from 'react';
 import styled from 'styled-components';
 import sortBy from 'sort-by';
 import Search from '../components/Search';
-import NewContacts from '../components/NewContacts';
 import Contacts from '../components/Contacts';
 
 
@@ -58,7 +57,6 @@ class ListContact extends Component {
           : <div className="showing-contacts">
               <span>Showing {this.state.queryContacts.length} out of {this.state.contacts.length}</span><button onClick={this.resetQueryContactsHandler} >Show All</button>
             </div> }
-        <NewContacts />
       </Fragment>
     )
   }
