@@ -2,6 +2,8 @@ import React, { Component, Fragment  } from 'react';
 import styled from 'styled-components';
 import sortBy from 'sort-by';
 import Search from '../components/Search';
+import NewContacts from '../components/NewContacts';
+import Contacts from '../components/Contacts';
 
 
 const IMG = styled.div`
@@ -49,22 +51,14 @@ class ListContact extends Component {
       <Fragment>
         <Search change={this.updateValueHandler} val={this.state.input.value} />
         <ul className="contact-list">
-          {this.state.queryContacts.map(contact => (
-            <li key={contact.id} className='contact-list-item'>
-              <IMG className="contact-avatar" url={contact.avatarURL}></IMG>
-              <div className="contact-details">
-                <p>{contact.name}</p>
-                <p>{contact.handle}</p>
-              </div>
-              <button onClick={(e) => this.deleteContactHandler(e, contact.id)} className="contact-remove"></button>
-            </li>
-          ))}
+          <Contacts contacts={this.state.queryContacts} delete={(event, id) => this.deleteContactHandler(event, id)} />
         </ul>
         {this.state.queryContacts.length === this.state.contacts.length 
           ? null 
           : <div className="showing-contacts">
               <span>Showing {this.state.queryContacts.length} out of {this.state.contacts.length}</span><button onClick={this.resetQueryContactsHandler} >Show All</button>
             </div> }
+        <NewContacts />
       </Fragment>
     )
   }
